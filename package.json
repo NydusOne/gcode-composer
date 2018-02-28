@@ -1,0 +1,22 @@
+{
+  "name": "gcode-composer",
+  "version": "0.2.0",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron main.js"
+  },
+  "author": "Dennis Ogiermann",
+  "license": "MIT",
+  "dependencies": {
+    "gcode-toolpath": "^2.2.0",
+    "jquery": "^3.3.1",
+    "jszip": "^3.1.5",
+    "tether": "^1.4.3",
+    "three": "^0.88.0",
+    "electron": "^1.8.0"
+  },
+  "repository" : {
+    "type" : "git",
+    "url" : "https://github.com/NydusOne/gcode-composer.git"
+  }
+}
