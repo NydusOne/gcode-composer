@@ -1,2 +1,2 @@
-npm update
-npm start
+call npm update
+call npm start
