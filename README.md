@@ -6,11 +6,21 @@ This program plans paths for an automatized experiment with our open source biop
 ## Installation
 1. Install NodeJS (e.g. via https://nodejs.org/en/download/)
 
-2. Run "launch-windows.bat" on Windows or "launch.sh" on OSX (and Linux)
+2. Download this repository and extract it somewhere or clone the repository with git
+
+3. Run "launch-windows.bat" on Windows or "launch.sh" on OSX and Linux
+If this step fails for some reason on linux or osx, then open a command line and type the following
+    1. cd path/to/your/composer/installation
+    2. chmod +x launch.sh
+    3. ./launch.sh
+The first command navigates you to the folder in which the composer resides, the second one make the launcher executable and the third one launches the software.
+Also, the second step, making the launcher executable, needs just to be done once.
 
 
 ## How to use the composer
-1. Generate a valid target container (e.g. six-well plate) and mark the printable volumes individually. The material of the printable volumes must be named "PrintArea".
+1. Download or generate a valid target container (e.g. six-well plate).
+Note: In target containers all printable volumes must be marked individually by constructing volumes with some CAD software, Blender or alike, to which a material named "PrintArea" must be assigned.
+Once all printable volumes has been marked as described just export the target container into an AMF formatted file.
 
 2. Design or reconstruct the biostructures you want to print. They must fit into the printable volumes of the target container!
 
