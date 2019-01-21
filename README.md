@@ -13,6 +13,7 @@ If this step fails for some reason on linux or osx, then open a command line and
     1. cd path/to/your/composer/installation
     2. chmod +x launch.sh
     3. ./launch.sh
+    
 The first command navigates you to the folder in which the composer resides, the second one make the launcher executable and the third one launches the software.
 Also, the second step, making the launcher executable, needs just to be done once.
 
@@ -35,4 +36,4 @@ Once all printable volumes has been marked as described just export the target c
 7. Send the gcode to the device. There will be two stops, where you need to intervene manually. At the first checkpoint remove syringe and target container from the device. After you press the continue the device checks its calibration status. When the device finished the checking routing it waits again to mount the syringe and the target container appropriately.
 
 ## Note
-The composer does NOT check, whenever the initial amount of bioink in the syringe is sufficient for an experiment and does not check for any collisions!
+The composer does NOT check whenever the initial amount of bioink in the syringe is sufficient for an experiment and does not check for any collisions!
