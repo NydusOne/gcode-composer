@@ -1,6 +1,9 @@
 const {app, BrowserWindow, dialog} = require('electron');
 let mainWindow;
 
+// WebGL workaround for Intel Graphic HD 3000
+app.commandLine.appendSwitch("ignore-gpu-blacklist");
+
 // Quit when all windows are closed.
 app.on('window-all-closed', function() {
   if (process.platform != 'darwin')
