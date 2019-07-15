@@ -111,36 +111,6 @@ function loadTargetContainerFromObjFile(fileName) {
 }
 
 
-function loadTargetContainerFromAmfFile(fileName){
-    var amfLoader = new THREE.AMFLoader();
-    amfLoader.load( fileName, function(amfObject){
-        amfObject.children[0].children.forEach(function(mesh){
-            if(mesh.material.name == "PrintArea"){
-                printAreas.push(mesh);
-            }
-        });
-
-        if(printAreas.length == 0) {
-            dialog.showErrorBox("", 'Target container must contain at least one tagged print area via metadata (name="PrintArea").');
-            return;
-        }
-
-        // add new structure to scene and program
-        targetContainer = amfObject;
-        scene.remove('targetContainer');
-        amfObject.name='targetContainer';
-        scene.add(amfObject);
-
-        // move the target's center to bed's center
-        centerContainer(amfObject);
-
-        // update ui
-        $('#targetContainerFileName').val(fileName);
-        $('#biostructureQuantity').attr({'max':availablePrintSlots(printAreas)});
-        $('#biostructureQuantity').parent().show(100);
-    });
-}
-
 // connect events with callbacks
 $(function(){
     $('#loadTargetContainerButton').click(function(){
