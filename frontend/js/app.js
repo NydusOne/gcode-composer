@@ -9,9 +9,9 @@ var fs = app.require('fs');
 var dialog = app.dialog;
 
 // shared variables
-var targetContainer = null;
-var printAreas = []; // the areas we can print into
-var biostructureGCodes = []; // the biostructures' gcodes we print per area
+var targetContainer = null; //!< target container geometry information
+var printAreas = []; //!< the areas we can print into
+var biostructureGCodes = []; //!< the biostructures' gcodes we print per area
 
 // device constants
 const EXTRUDER_TRAVEL_SPEED = 0.2; //!< empirical value for extruder travel speed
@@ -96,7 +96,6 @@ function loadTargetContainerFromObjFile(fileName) {
 
         // add new structure to scene and program
         targetContainer = objObject;
-        //var bbox = new THREE.Box3().setFromObject(targetContainer);
         objObject.add(new THREE.BoxHelper(targetContainer));
         scene.add(targetContainer);
 
@@ -113,7 +112,7 @@ function loadTargetContainerFromObjFile(fileName) {
 
 // connect events with callbacks
 $(function(){
-    $('#loadTargetContainerButton').click(function(){
+    $('#loadTargetContainerButton').on("click", function(){
         dialog.showOpenDialog({filters: [{name: '.obj', extensions: ['obj']}]}, function (fileNames) {
             // the dialog calls this function with an undefined variable, when the user cancels the selection.
             if (fileNames === undefined){
@@ -131,7 +130,7 @@ $(function(){
         });
     });
 
-    $('#biostructureFileButton').click(function(){
+    $('#biostructureFileButton').on("click", function(){
         dialog.showOpenDialog({filters: [{name: '.gcode', extensions: ['gcode']}]}, function (fileNames) {
              if (fileNames === undefined){
                return;
@@ -193,7 +192,7 @@ $(function(){
         });
     });
 
-    $('#composeGCodeButton').click(function(){
+    $('#composeGCodeButton').on("click", function(){
         if(targetContainer == null){
             dialog.showErrorBox("No target container found", "Choose a target container.");
             return;
@@ -330,7 +329,7 @@ $(function(){
         });
     });
 
-    $('#saveGCodeButton').click(function(){
+    $('#saveGCodeButton').on("click", function(){
         if(!$('#gcode-preview').text()){
             dialog.showErrorBox("", "No GCode to save.");
             return;
