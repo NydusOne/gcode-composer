@@ -1,5 +1,8 @@
 const {app, BrowserWindow, dialog} = require('electron');
+const remoteMain = require('@electron/remote/main');
 let mainWindow;
+
+remoteMain.initialize()
 
 // WebGL workaround for Intel Graphic HD 3000
 app.commandLine.appendSwitch("ignore-gpu-blacklist");
@@ -15,13 +18,16 @@ app.on('window-all-closed', function() {
 app.on('ready', function() {
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    width: 1200, 
-    height: 800, 
+    width: 1200,
+    height: 800,
     frame:true,
     webPreferences: {
       nodeIntegration: true,
+      contextIsolation: false,
       nodeIntegrationInWorker: true
     }});
+
+  remoteMain.enable(mainWindow.webContents);
 
   // and load the index.html of the app.
   mainWindow.loadURL('file://' + __dirname + '/frontend/index.html');

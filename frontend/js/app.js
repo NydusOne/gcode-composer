@@ -4,7 +4,7 @@
 $('#biostructureQuantity').parent().hide();
 
 // get file system and dialogues
-var app = require('electron').remote;
+var app = require('@electron/remote');
 var fs = app.require('fs');
 var dialog = app.dialog;
 
