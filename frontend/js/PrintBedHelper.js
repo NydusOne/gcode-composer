@@ -2,11 +2,6 @@ var THREE = require('three');
 
 class PrintBedHelper extends THREE.LineSegments {
 	constructor( sizeX, sizeY, step, color ) {
-    //constructor( parameters ) {
-		// sizeX = parameters.sizeX
-		// sizeY = parameters.sizeY
-		// step  = parameters.step
-		// color = parameters.color
         color = new THREE.Color( color !== undefined ? color : 0x444444 );
 
         // color and vertex buffer
