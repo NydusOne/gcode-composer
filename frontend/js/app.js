@@ -134,10 +134,10 @@ $(function(){
     });
 
     $('#biostructureFileButton').on("click", function(){
-        dialog.showOpenDialog({filters: [{name: '.gcode', extensions: ['gcode']}]}, function (fileNames) {
-             if (fileNames === undefined){
-               return;
-             }
+        dialog.showOpenDialog(BrowserWindow, {properties: ["openFile"]}).then(function (result) {
+            if (result.cancelled) {
+                return;
+            }
 
              if(availablePrintSlots(printAreas) == 0)
              {
@@ -145,7 +145,7 @@ $(function(){
                return;
              }
 
-             fs.readFile(fileNames[0], 'utf-8', function (err, data) {
+             fs.readFile(result.filePaths[0], 'utf-8', function (err, data) {
                  if(err){
                      dialog.showErrorBox("", "An error ocurred loading the file: " + err.message);
                      return;
@@ -182,7 +182,7 @@ $(function(){
                      var biostructureQuantity = Math.min($('#biostructureQuantity').val(), availablePrintSlots(printAreas));
                      var usedSlots = printAreas.length - availablePrintSlots(printAreas);
 
-                     $('#biostructure-list').append('<li class="list-group-item justify-content-between">' + fileNames[0].substring(fileNames[0].lastIndexOf('/')+1) + '<span class="badge badge-default badge-pill">'+ biostructureQuantity +'</span></li>');
+                     $('#biostructure-list').append('<li class="list-group-item justify-content-between">' + result.filePaths[0].substring(result.filePaths[0].lastIndexOf('/')+1) + '<span class="badge badge-default badge-pill">'+ biostructureQuantity +'</span></li>');
 
                      for(var i = 0; i < biostructureQuantity; i++){
                          biostructureGCodes.push(data);
