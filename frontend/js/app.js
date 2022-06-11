@@ -1,5 +1,7 @@
 'use strict';
 
+const { BrowserWindow } = require('@electron/remote');
+
 // hide the input until an appropriate
 $('#biostructureQuantity').parent().hide();
 
@@ -44,12 +46,14 @@ function limitTo3DecimalPlaces(number) {
 // move the target's center to bed's center
 function centerContainer(container) {
     var bbox = new THREE.Box3().setFromObject(container);
-    var toCenterAxis = bbox.getCenter().negate();
+    var toCenterAxis = new THREE.Vector3(); 
+    bbox.getCenter(toCenterAxis);
+    toCenterAxis.negate();
     toCenterAxis.normalize();
-    container.translateOnAxis(toCenterAxis, bbox.getCenter().length());
+    container.translateOnAxis(toCenterAxis, toCenterAxis.length());
 
     bbox.setFromObject(bed);
-    toCenterAxis = bbox.getCenter();
+    bbox.getCenter(toCenterAxis);
     container.translateX(toCenterAxis.x);
     container.translateY(toCenterAxis.y);
     container.translateZ(bbox.min.z);
@@ -113,9 +117,8 @@ function loadTargetContainerFromObjFile(fileName) {
 // connect events with callbacks
 $(function(){
     $('#loadTargetContainerButton').on("click", function(){
-        dialog.showOpenDialog({filters: [{name: '.obj', extensions: ['obj']}]}, function (fileNames) {
-            // the dialog calls this function with an undefined variable, when the user cancels the selection.
-            if (fileNames === undefined){
+        dialog.showOpenDialog(BrowserWindow, {properties: ["openFile"]}).then(function (result) {
+            if (result.cancelled) {
                 return;
             }
 
@@ -126,7 +129,7 @@ $(function(){
             }
 
             // load new target container
-            loadTargetContainerFromObjFile(fileNames[0]);
+            loadTargetContainerFromObjFile(result.filePaths[0]);
         });
     });
 
