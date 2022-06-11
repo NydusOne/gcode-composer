@@ -243,7 +243,8 @@ $(function(){
         // print biostructures into volumes to execute the experiment by changing the coordinate space
         biostructureGCodes.forEach(function(biostructureGCode, index){
             var bboxPrintArea = new THREE.Box3().setFromObject(printAreas[index]);
-            var areaCenter = bboxPrintArea.getCenter();
+            var areaCenter = new THREE.Vector3();
+            bboxPrintArea.getCenter(areaCenter);
 
             // target container center with
             var containerCenterX = limitTo3DecimalPlaces(areaCenter.x*10);
@@ -291,7 +292,7 @@ $(function(){
 
         // render the path
         const defaultPathColor = new THREE.Color(0xFF4444);
-        const addLine = (v1, v2) => {
+        const createLineSegment = (v1, v2) => {
             const vertices = [
                 new THREE.Vector3(v1.x, v1.y-EXTRUDER_Y_OFFSET*10, v1.z),
                 new THREE.Vector3(v2.x, v2.y-EXTRUDER_Y_OFFSET*10, v2.z)
@@ -301,34 +302,35 @@ $(function(){
             return { vertices, colors };
         };
         const Toolpath = require("./js/Toolpath.js"); // replace with gcode-toolpath, when G92 bugs fixed
-        var pathGeometry = new THREE.Geometry();
+        var pathGeometry = new THREE.BufferGeometry();
+        var points = []
         const toolpath = new Toolpath({
             addLine: (modal, v1, v2) => {
                 v1.z -= zOffset;
                 v2.z -= zOffset;
-                const line = addLine(v1, v2);
-                Array.prototype.push.apply(pathGeometry.vertices, line.vertices);
-                Array.prototype.push.apply(pathGeometry.colors, line.colors);
+                const line = createLineSegment(v1, v2);
+                points.push(line.vertices[0]);
+                points.push(line.vertices[1]);
             }
         });
 
-
         toolpath.loadFromString(finalCode, (line, index) => {
-          const path = new THREE.Line(
-            new THREE.Geometry(),
-            new THREE.LineBasicMaterial({
-                color: defaultPathColor,
-                linewidth: 1,
-                vertexColors: THREE.VertexColors,
-                transparent: false
-            })
-          );
-          path.geometry.vertices = pathGeometry.vertices.slice();
-          path.geometry.colors = pathGeometry.colors.slice();
-          path.scale.x = 0.1;
-          path.scale.y = 0.1;
-          path.scale.z = 0.1;
-          scene.add(path);
+        })
+        .on('end', (results) => {
+            var pathgeo = new THREE.BufferGeometry();
+            pathgeo.setFromPoints(points);
+            const path = new THREE.LineSegments(
+                pathgeo,
+                new THREE.LineBasicMaterial({
+                    color: defaultPathColor,
+                    linewidth: 1,
+                    transparent: false
+                })
+            );
+            path.scale.x = 0.1;
+            path.scale.y = 0.1;
+            path.scale.z = 0.1;
+            scene.add(path);
         });
     });
 
